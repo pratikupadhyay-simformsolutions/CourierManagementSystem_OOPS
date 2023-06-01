@@ -1,0 +1,29 @@
+﻿@page "/GenerateReport"
+@using Microsoft.AspNetCore.Identity
+@using CourierManagementSystem.Data
+@attribute [Authorize]
+
+@inject ReportService reportService
+
+<h1>Generate  Report</h1>
+
+@if (ReportData is null)
+{
+    <p><em>No report generated yet.</em></p>
+}
+else
+{
+    <h2>Report</h2>
+    <p>Download the generated report: <a href="data:text/csv;base64,@Convert.ToBase64String(ReportData)" download="Report.csv">Download</a></p>
+}
+
+<button class="btn btn-primary" @onclick="GenerateReport">Generate Report</button>
+
+@code {
+    byte[] ReportData;
+
+    private async Task GenerateReport()
+    {
+        ReportData = await reportService.GenerateReportAsync();
+    }
+}
